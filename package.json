@@ -21,6 +21,7 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@quixo3/prisma-session-store": "^3.1.19",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
