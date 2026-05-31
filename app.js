@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
@@ -21,7 +22,7 @@ app.use(
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
     },
-    secret: process.env.secret,
+    secret: `${process.env.SECRET}`,
     resave: false,
     saveUninitialized: false,
     store: new PrismaSessionStore(prisma, {
