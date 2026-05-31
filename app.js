@@ -14,12 +14,14 @@ const {
 const app = express();
 const PORT = 10000; // Render uses port 10000
 
+app.use(express.json());
+
 app.use(
   session({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
     },
-    secret: "romeo and juliet",
+    secret: process.env.secret,
     resave: false,
     saveUninitialized: false,
     store: new PrismaSessionStore(prisma, {
