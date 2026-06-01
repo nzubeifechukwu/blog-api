@@ -1,6 +1,8 @@
 const prisma = require("../lib/prisma");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 const localStrategy = new LocalStrategy(
   { usernameField: "email", passwordField: "password" },
@@ -40,4 +42,30 @@ async function deserializeSession(id, done) {
   }
 }
 
-module.exports = { localStrategy, serializeSession, deserializeSession };
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: `${process.env.SECRET}`,
+};
+
+const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+    });
+
+    if (user) {
+      const { password: _, ...userWithoutPassword } = user;
+      return done(null, userWithoutPassword);
+    }
+    return done(null, false);
+  } catch (error) {
+    return done(error, false);
+  }
+});
+
+module.exports = {
+  localStrategy,
+  serializeSession,
+  deserializeSession,
+  jwtStrategy,
+};

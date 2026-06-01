@@ -10,6 +10,7 @@ const {
   localStrategy,
   serializeSession,
   deserializeSession,
+  jwtStrategy,
 } = require("./authenticators/authenticators");
 
 const app = express();
@@ -36,6 +37,7 @@ app.use(
 app.use(passport.session());
 
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 passport.serializeUser(serializeSession);
 passport.deserializeUser(deserializeSession);
 
