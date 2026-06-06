@@ -85,4 +85,29 @@ async function loginUser(req, res, next) {
   }
 }
 
-module.exports = { home, createUser, loginUser };
+async function createPost(req, res, next) {
+  const { title, content, published } = req.body;
+
+  if (!title || !content) {
+    return res.status(400).json({ message: "Title and content are required." });
+  }
+
+  try {
+    const newPost = await prisma.post.create({
+      data: {
+        title,
+        content,
+        published: published || false,
+        authorId: req.user.id,
+      },
+    });
+
+    return res
+      .status(201)
+      .json({ message: "Post created successfully.", post: newPost });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { home, createUser, loginUser, createPost };
