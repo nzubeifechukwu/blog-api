@@ -110,4 +110,31 @@ async function createPost(req, res, next) {
   }
 }
 
-module.exports = { home, createUser, loginUser, createPost };
+async function updateRole(req, res, next) {
+  const { role } = req.body;
+
+  const validRoles = ["READER", "AUTHOR"];
+  if (!role || !validRoles.includes(role.toUpperCase())) {
+    return res
+      .status(400)
+      .json({ message: "Invalid role. Choose either 'READER' or 'AUTHOR'." });
+  }
+
+  try {
+    // req.user.id is available because this route will be protected by JWT
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: { role: role.toUpperCase() },
+    });
+
+    const { password: _, ...userWithoutPassword } = updatedUser;
+    return res.status(200).json({
+      message: `Role successfully updated to ${updatedUser.role}.`,
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { home, createUser, loginUser, createPost, updateRole };

@@ -15,5 +15,10 @@ router.post(
   requireAuthor, // Check if the user has the AUTHOR role
   controllers.createPost,
 );
+router.patch(
+  "/user/role",
+  passport.authenticate("jwt", { session: false }),
+  controllers.updateRole,
+);
 
 module.exports = router;
