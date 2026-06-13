@@ -12,6 +12,7 @@ const {
   deserializeSession,
   jwtStrategy,
 } = require("./authenticators/authenticators");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = 10000; // Render uses port 10000
@@ -42,6 +43,8 @@ passport.serializeUser(serializeSession);
 passport.deserializeUser(deserializeSession);
 
 app.use("/", router);
+
+app.use(errorHandler);
 
 app.listen(PORT, (error) => {
   if (error) {

@@ -97,7 +97,7 @@ async function createPost(req, res, next) {
       data: {
         title,
         content,
-        published: published || false,
+        published: published === true || published === "true",
         authorId: req.user.id,
       },
     });
