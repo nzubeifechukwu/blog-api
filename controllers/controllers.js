@@ -176,13 +176,45 @@ async function getPostById(req, res, next) {
       // If user isn't logged in, or logged-in user isn't the author
       if (!req.user || req.user.id !== post.authorId) {
         return res.status(403).json({
-          message:
-            "This article is an unpublished draft, so you can't read it.",
+          message: "Cannot read an unpublished draft.",
         });
       }
     }
 
     return res.status(200).json({ post });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function createComment(req, res, next) {
+  const { content } = req.body;
+  const { id: postId } = req.params; // Rename "id" to "postId"
+
+  if (!content || content.trim() === "") {
+    return res.status(400).json({ message: "Comment cannot be empty." });
+  }
+
+  try {
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: "Cannot comment on an article that doesn't exist." });
+    }
+    if (!post.published && post.authorId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Cannot comment on an unpublished draft." });
+    }
+
+    const newComment = await prisma.comment.create({
+      data: { content, postId: postId, authorId: req.user.id },
+    });
+
+    return res
+      .status(201)
+      .json({ message: "Comment added successfully.", comment: newComment });
   } catch (error) {
     next(error);
   }
@@ -196,4 +228,5 @@ module.exports = {
   updateRole,
   getPublishedPosts,
   getPostById,
+  createComment,
 };
