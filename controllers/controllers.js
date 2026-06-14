@@ -137,4 +137,63 @@ async function updateRole(req, res, next) {
   }
 }
 
-module.exports = { home, createUser, loginUser, createPost, updateRole };
+async function getPublishedPosts(req, res, next) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      include: {
+        author: { select: { id: true, name: true, email: true, role: true } },
+      },
+      orderBy: { createdAt: "desc" }, // Show newest posts first
+    });
+
+    return res.status(200).json({ count: posts.length, posts: posts });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getPostById(req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: id },
+      include: {
+        author: { select: { id: true, name: true, role: true } },
+        comments: {
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    });
+
+    if (!post) {
+      return res.status(404).json({ message: "Article not found." });
+    }
+
+    // Only author can see an unpublished post
+    if (!post.published) {
+      // If user isn't logged in, or logged-in user isn't the author
+      if (!req.user || req.user.id !== post.authorId) {
+        return res.status(403).json({
+          message:
+            "This article is an unpublished draft, so you can't read it.",
+        });
+      }
+    }
+
+    return res.status(200).json({ post });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = {
+  home,
+  createUser,
+  loginUser,
+  createPost,
+  updateRole,
+  getPublishedPosts,
+  getPostById,
+};
