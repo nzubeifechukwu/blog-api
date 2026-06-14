@@ -158,7 +158,7 @@ async function getPostById(req, res, next) {
 
   try {
     const post = await prisma.post.findUnique({
-      where: { id: id },
+      where: { id: parseInt(id) },
       include: {
         author: { select: { id: true, name: true, role: true } },
         comments: {
@@ -196,7 +196,9 @@ async function createComment(req, res, next) {
   }
 
   try {
-    const post = await prisma.post.findUnique({ where: { id: postId } });
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(postId) },
+    });
     if (!post) {
       return res
         .status(404)
@@ -209,7 +211,7 @@ async function createComment(req, res, next) {
     }
 
     const newComment = await prisma.comment.create({
-      data: { content, postId: postId, authorId: req.user.id },
+      data: { content, postId: parseInt(postId), authorId: req.user.id },
     });
 
     return res
