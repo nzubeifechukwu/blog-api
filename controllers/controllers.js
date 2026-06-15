@@ -121,9 +121,8 @@ async function updateRole(req, res, next) {
   }
 
   try {
-    // req.user.id is available because this route will be protected by JWT
     const updatedUser = await prisma.user.update({
-      where: { id: req.user.id },
+      where: { id: req.user.id }, // req.user.id is available because this route will be protected by JWT
       data: { role: role.toUpperCase() },
     });
 
@@ -222,6 +221,48 @@ async function createComment(req, res, next) {
   }
 }
 
+async function updatePost(req, res, next) {
+  const { id } = req.params;
+  const { title, content, published } = req.body;
+
+  try {
+    const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
+
+    if (!post) {
+      return res.status(404).json({ message: "Article not found." });
+    }
+
+    if (post.authorId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Forbidden! You are not the author of this post." });
+    }
+
+    const updateData = {};
+    if (title !== undefined) {
+      updateData.title = title;
+    }
+    if (content !== undefined) {
+      updateData.content = content;
+    }
+    if (published !== undefined) {
+      updateData.published = published === true || published === "true"; // Save as a Boolean true/false
+    }
+
+    const updatedPost = await prisma.post.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+    });
+
+    return res.status(200).json({
+      message: "Post updated successfully.",
+      post: updatedPost,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   home,
   createUser,
@@ -231,4 +272,5 @@ module.exports = {
   getPublishedPosts,
   getPostById,
   createComment,
+  updatePost,
 };

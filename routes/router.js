@@ -32,5 +32,10 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   controllers.createComment,
 );
+router.patch(
+  "/posts/:id",
+  passport.authenticate("jwt", { session: false }),
+  controllers.updatePost,
+);
 
 module.exports = router;
