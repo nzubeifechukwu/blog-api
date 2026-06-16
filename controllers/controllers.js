@@ -263,6 +263,33 @@ async function updatePost(req, res, next) {
   }
 }
 
+async function deletePost(req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
+
+    if (!post) {
+      return res.status(404).json({ message: "Article not found." });
+    }
+
+    if (post.authorId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Forbidden! You are not the author of this post." });
+    }
+
+    await prisma.post.delete({
+      where: { id: parseInt(id) },
+      include: { comments: true },
+    });
+
+    return res.status(200).json({ message: "Post deleted successfully." });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   home,
   createUser,
@@ -273,4 +300,5 @@ module.exports = {
   getPostById,
   createComment,
   updatePost,
+  deletePost,
 };

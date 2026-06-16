@@ -37,5 +37,10 @@ router.patch(
   passport.authenticate("jwt", { session: false }),
   controllers.updatePost,
 );
+router.delete(
+  "/posts/:id",
+  passport.authenticate("jwt", { session: false }),
+  controllers.deletePost,
+);
 
 module.exports = router;
