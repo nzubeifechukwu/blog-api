@@ -199,9 +199,7 @@ async function createComment(req, res, next) {
       where: { id: parseInt(postId) },
     });
     if (!post) {
-      return res
-        .status(404)
-        .json({ message: "Cannot comment on an article that doesn't exist." });
+      return res.status(404).json({ message: "Article doesn't exist." });
     }
     if (!post.published && post.authorId !== req.user.id) {
       return res
@@ -233,9 +231,9 @@ async function updatePost(req, res, next) {
     }
 
     if (post.authorId !== req.user.id) {
-      return res
-        .status(403)
-        .json({ message: "Forbidden! You are not the author of this post." });
+      return res.status(403).json({
+        message: "Forbidden! You are not authorized to edit this article.",
+      });
     }
 
     const updateData = {};
@@ -274,9 +272,9 @@ async function deletePost(req, res, next) {
     }
 
     if (post.authorId !== req.user.id) {
-      return res
-        .status(403)
-        .json({ message: "Forbidden! You are not the author of this post." });
+      return res.status(403).json({
+        message: "Forbidden! You are not authorized to delete this article.",
+      });
     }
 
     await prisma.post.delete({
@@ -290,31 +288,27 @@ async function deletePost(req, res, next) {
   }
 }
 
-async function deleteCommentById(req, res, next) {
-  const { postId, commentId } = req.params;
+async function deleteComment(req, res, next) {
+  const { id } = req.params;
 
   try {
-    const post = await prisma.post.findUnique({
-      where: { id: parseInt(postId) },
-    });
-    if (!post) {
-      return res.status(404).json({ message: "Article not found." });
-    }
-
     const comment = await prisma.comment.findUnique({
-      where: { id: parseInt(commentId) },
+      where: { id: parseInt(id) },
+      include: { post: { select: { authorId: true } } },
     });
     if (!comment) {
       return res.status(404).json({ message: "Comment not found." });
     }
 
-    if (post.authorId === req.user.id || comment.authorId === req.user.id) {
-      await prisma.comment.delete({ where: { id: parseInt(commentId) } });
+    if (
+      comment.authorId === req.user.id ||
+      comment.post.authorId === req.user.id
+    ) {
+      await prisma.comment.delete({ where: { id: parseInt(id) } });
       return res.status(200).json({ message: "Comment deleted successfully." });
     } else {
       return res.status(403).json({
-        message:
-          "Forbidden! Only article or comment author can delete comment.",
+        message: "Forbidden! You are not authorized to delete this comment.",
       });
     }
   } catch (error) {
@@ -333,4 +327,5 @@ module.exports = {
   createComment,
   updatePost,
   deletePost,
+  deleteComment,
 };
