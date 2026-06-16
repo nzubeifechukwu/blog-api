@@ -290,6 +290,38 @@ async function deletePost(req, res, next) {
   }
 }
 
+async function deleteCommentById(req, res, next) {
+  const { postId, commentId } = req.params;
+
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(postId) },
+    });
+    if (!post) {
+      return res.status(404).json({ message: "Article not found." });
+    }
+
+    const comment = await prisma.comment.findUnique({
+      where: { id: parseInt(commentId) },
+    });
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found." });
+    }
+
+    if (post.authorId === req.user.id || comment.authorId === req.user.id) {
+      await prisma.comment.delete({ where: { id: parseInt(commentId) } });
+      return res.status(200).json({ message: "Comment deleted successfully." });
+    } else {
+      return res.status(403).json({
+        message:
+          "Forbidden! Only article or comment author can delete comment.",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   home,
   createUser,
