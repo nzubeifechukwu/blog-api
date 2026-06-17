@@ -8,7 +8,7 @@ function home(req, res) {
     message: "Welcome to Nzube's Blog API",
     version: "1.0.0",
     docs: "tbd",
-    endpoints: { user: "/user", posts: "/posts", comments: "/comments" },
+    endpoints: { user: "/user", posts: "/posts" },
   });
 }
 
