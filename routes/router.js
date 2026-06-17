@@ -12,7 +12,7 @@ router.get("/posts", controllers.getPublishedPosts);
 router.get("/posts/:id", optionalAuth, controllers.getPostById); // uses optionalAuth so authors can see their unpublished drafts
 
 // Authentication & Registration
-router.post("/user", controllers.createUser);
+router.post("/users", controllers.createUser);
 router.post("/login", controllers.loginUser);
 
 // Protected routes
@@ -23,7 +23,7 @@ router.post(
   controllers.createPost,
 );
 router.patch(
-  "/user/role",
+  "/users/role",
   passport.authenticate("jwt", { session: false }),
   controllers.updateRole,
 );

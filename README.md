@@ -6,18 +6,18 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Dual-Role Authorization:** Dedicated workflows for `AUTHOR` and `READER` accounts.
 - **Secure Authentication:** Stateless session management via JSON Web Tokens (JWT) and Passport.js.
-- **Comprehensive Post CRUD:** Authors can create, read, update (via dynamic `PATCH` endpoints), and delete articles.
+- **Comprehensive Post CRUD:** Authors can create, read, update, and delete articles.
 - **Nested Engagement System:** Structured reader interactions allowing users to write and manage comments.
 - **Advanced Content Moderation:** Deletion capabilities extended to both the comment creator and the parent post author.
-- **Relational Integrity:** Built-in PostgreSQL cascading deletes (`onDelete: Cascade`) to seamlessly clear orphaned data when posts are deleted.
+- **Relational Integrity:** Built-in PostgreSQL cascading deletes to seamlessly clear orphaned data when posts are deleted.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Runtime Environment:** Node.js
 - **Backend Framework:** Express.js
@@ -27,15 +27,15 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 
 ---
 
-## 📋 API Reference & Endpoints
+## API Reference & Endpoints
 
 ### Authentication & Profiles
 
-| Method  | Endpoint         | Access    | Description                                         |
-| ------- | ---------------- | --------- | --------------------------------------------------- |
-| `POST`  | `/auth/register` | Public    | Registers a new account (Defaults to `READER`).     |
-| `POST`  | `/auth/login`    | Public    | Authenticates credentials and returns a signed JWT. |
-| `PATCH` | `/users/role`    | Protected | Upgrades/downgrades a user's role status.           |
+| Method  | Endpoint      | Access    | Description                                         |
+| ------- | ------------- | --------- | --------------------------------------------------- |
+| `POST`  | `/users`      | Public    | Registers a new account (Defaults to `READER`).     |
+| `POST`  | `/login`      | Public    | Authenticates credentials and returns a signed JWT. |
+| `PATCH` | `/users/role` | Protected | Upgrades/downgrades a user's role status.           |
 
 ### Articles & Posts
 
@@ -49,14 +49,14 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 
 ### Comments System
 
-| Method   | Endpoint                  | Access        | Description                                                                |
-| -------- | ------------------------- | ------------- | -------------------------------------------------------------------------- |
-| `POST`   | `/posts/:postId/comments` | Authenticated | Appends a new reader comment to a specific article.                        |
-| `DELETE` | `/comments/:commentId`    | Authorized    | Deletes a comment. (Accessible by the comment creator OR the post author). |
+| Method   | Endpoint              | Access        | Description                                                                 |
+| -------- | --------------------- | ------------- | --------------------------------------------------------------------------- |
+| `POST`   | `/posts/:id/comments` | Authenticated | Appends a new reader comment to a specific article.                         |
+| `DELETE` | `/comments/:id`       | Authorized    | Deletes a comment. (Accessible by the comment creator AND the post author). |
 
 ---
 
-## ⚙️ Installation & Local Setup
+## Installation & Local Setup
 
 ### 1. Prerequisites
 
@@ -68,7 +68,7 @@ Ensure you have the following software installed on your machine:
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/blog-api.git
+git clone https://github.com/nzubeifechukwu/blog-api.git
 cd blog-api
 
 ```
@@ -95,7 +95,7 @@ JWT_SECRET="your_super_secret_jwt_key_here"
 
 ### 5. Run Database Migrations
 
-Synchronize your local PostgreSQL database with the Prisma Schema blueprints and establish relationship constraints (including cascade rules):
+Synchronize your local PostgreSQL database with the Prisma Schema blueprints and establish relationship constraints:
 
 ```bash
 npx prisma migrate dev --name init_blog_schema
@@ -107,7 +107,7 @@ npx prisma migrate dev --name init_blog_schema
 To spin up the server with hot-reloading for development:
 
 ```bash
-npm run dev
+node --watch app.js
 
 ```
 
@@ -115,7 +115,7 @@ The server will boot up and listen for requests on `http://localhost:10000`.
 
 ---
 
-## 🧪 Quick Test Script
+## Quick Test Script
 
 You can verify your endpoints locally using `curl`.
 
@@ -136,3 +136,15 @@ curl -X DELETE http://localhost:10000/comments/5 \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 
 ```
+
+---
+
+## Inspiration
+
+This [Blog API project](https://www.theodinproject.com/lessons/node-path-nodejs-blog-api) is part of the The Odin Project's [Full-Stack Web Development (JavaScript) path](https://www.theodinproject.com/paths/full-stack-javascript).
+
+---
+
+## Contact
+
+You can reach me on [X](https://x.com/NzubeIfechukwu) or [LinkedIn](https://www.linkedin.com/in/nzubeifechukwu/).
