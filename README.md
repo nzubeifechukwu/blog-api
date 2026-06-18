@@ -1,8 +1,8 @@
 # Blog API
 
-A secure, RESTful API designed to power a dual-frontend blogging platform featuring separate dashboards for **Authors** (to write and manage content) and **Readers** (to consume content and leave feedback).
+A REST API designed to power a dual-frontend blogging platform: one frontend is for writing, editing and publishing posts, while the other is for reading and commenting on posts.
 
-Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authentication and structured authorization layers to ensure strict content security.
+Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authentication to ensure security.
 
 ---
 
@@ -10,10 +10,9 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 
 - **Dual-Role Authorization:** Dedicated workflows for `AUTHOR` and `READER` accounts.
 - **Secure Authentication:** Stateless session management via JSON Web Tokens (JWT) and Passport.js.
-- **Comprehensive Post CRUD:** Authors can create, read, update, and delete articles.
-- **Nested Engagement System:** Structured reader interactions allowing users to write and manage comments.
-- **Advanced Content Moderation:** Deletion capabilities extended to both the comment creator and the parent post author.
-- **Relational Integrity:** Built-in PostgreSQL cascading deletes to seamlessly clear orphaned data when posts are deleted.
+- **Comprehensive Post CRUD:** Authors can create, read, update and delete articles.
+- **Engagement/Feedback System:** Users can write and manage comments.
+- **Content Moderation:** Deletion capabilities extended to both the comment creator and the parent post author.
 
 ---
 
@@ -35,24 +34,24 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 | ------- | ------------- | --------- | --------------------------------------------------- |
 | `POST`  | `/users`      | Public    | Registers a new account (Defaults to `READER`).     |
 | `POST`  | `/login`      | Public    | Authenticates credentials and returns a signed JWT. |
-| `PATCH` | `/users/role` | Protected | Upgrades/downgrades a user's role status.           |
+| `PATCH` | `/users/role` | Protected | Updates a user's role status.                       |
 
 ### Articles & Posts
 
-| Method   | Endpoint     | Access      | Description                                                                      |
-| -------- | ------------ | ----------- | -------------------------------------------------------------------------------- |
-| `GET`    | `/posts`     | Public      | Retrieves a listing of all **published** articles.                               |
-| `GET`    | `/posts/:id` | Public      | Retrieves a specific article by its unique ID.                                   |
-| `POST`   | `/posts`     | Author Only | Creates a new article (defaults to draft format).                                |
-| `PATCH`  | `/posts/:id` | Post Owner  | Dynamically updates parts of an article (title, content, or publication status). |
-| `DELETE` | `/posts/:id` | Post Owner  | Permanently removes an article and all of its associated comments.               |
+| Method   | Endpoint     | Access      | Description                                                          |
+| -------- | ------------ | ----------- | -------------------------------------------------------------------- |
+| `GET`    | `/posts`     | Public      | Retrieves a listing of all **published** articles.                   |
+| `GET`    | `/posts/:id` | Public      | Retrieves a specific article by its unique ID.                       |
+| `POST`   | `/posts`     | Author Only | Creates a new article (defaults to draft format).                    |
+| `PATCH`  | `/posts/:id` | Post Owner  | Updates parts of an article (title, content, or publication status). |
+| `DELETE` | `/posts/:id` | Post Owner  | Removes an article and all of its associated comments.               |
 
 ### Comments System
 
-| Method   | Endpoint              | Access        | Description                                                                 |
-| -------- | --------------------- | ------------- | --------------------------------------------------------------------------- |
-| `POST`   | `/posts/:id/comments` | Authenticated | Appends a new reader comment to a specific article.                         |
-| `DELETE` | `/comments/:id`       | Authorized    | Deletes a comment. (Accessible by the comment creator AND the post author). |
+| Method   | Endpoint              | Access        | Description                                                                |
+| -------- | --------------------- | ------------- | -------------------------------------------------------------------------- |
+| `POST`   | `/posts/:id/comments` | Authenticated | Appends a new comment to an article.                                       |
+| `DELETE` | `/comments/:id`       | Authorized    | Deletes a comment (accessible by the comment creator and the post author). |
 
 ---
 
@@ -75,7 +74,7 @@ cd blog-api
 
 ### 3. Install Dependencies
 
-This project uses the `npm` package manager exclusively. Do not generate or mix with a `yarn.lock` file.
+This project uses the `npm` package manager.
 
 ```bash
 npm install
@@ -87,7 +86,6 @@ npm install
 Create a `.env` file in the root directory of your project and configure the template below:
 
 ```env
-PORT=10000
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
 JWT_SECRET="your_super_secret_jwt_key_here"
 
@@ -117,7 +115,7 @@ The server will boot up and listen for requests on `http://localhost:10000`.
 
 ## Quick Test Script
 
-You can verify your endpoints locally using `curl`.
+You can verify your endpoints locally using `curl`. Examples are given below for a few endpoints and methods.
 
 ### Edit an existing post (PATCH):
 
