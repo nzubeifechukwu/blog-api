@@ -70,11 +70,10 @@ Ensure you have the following software installed on your machine:
 ### 2. Clone the Repository
 
 ```bash
-git clone [https://github.com/nzubeifechukwu/blog-api.git](https://github.com/nzubeifechukwu/blog-api.git)
+git clone https://github.com/nzubeifechukwu/blog-api.git
 cd blog-api
-```
 
-````
+```
 
 ### 3. Install Dependencies
 
