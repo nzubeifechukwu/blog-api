@@ -4,7 +4,7 @@ A REST API designed to power a dual-frontend blogging platform: one frontend is 
 
 Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authentication to ensure security.
 
-Live Deployment URL: https://blog-api-lld2.onrender.com/
+**Live Deployment URL:** https://blog-api-lld2.onrender.com/
 
 ---
 
@@ -116,21 +116,23 @@ The server will boot up and listen for requests on `http://localhost:10000`.
 
 ---
 
-## 🛠️ Testing the Endpoints
+## Testing the Endpoints
 
-To make evaluating this project as seamless as possible, pre-configured **Postman Collection** and **Environment** JSON configuration files are included in the root directory of this repository.
+A pre-configured **Postman Collection** alongside separate **Local** and **Production Environment** JSON files are included in the root directory of this repository to help with testing the endpoints.
 
-Follow these steps to run and test all 9 CRUD endpoints locally within minutes:
+Follow these steps to run and test all 9 CRUD endpoints:
 
 ### 1. Import Config Files into Postman
 
-1. Download `blog-api-postman-collection.json` and `blog-api-local.postman_environment.json` from the root of this project.
+1. Download `blog-api-postman-collection.json`, `blog-api-local.postman_environment.json` and `blog-api-production.postman_environment.json` from the root of this project.
 2. Open Postman, click the **Import** button in the navigation pane, and select both files together.
 
-### 2. Activate the Local Environment
+### 2. Activate Your Target Environment
 
-1. Look at the top-right corner of your Postman workspace pane. Change the environment dropdown tracker from **No Environment** to **Blog API - Local**.
-2. This maps the dynamic variable `{{baseUrl}}` to point directly to our running local server instance at `http://localhost:10000`.
+Depending on whether you want to test the API locally or live in production, select the appropriate environment dropdown in the top-right corner of Postman:
+
+- **To Test Locally:** Select **Blog API - Local**. This routes `{{baseUrl}}` to `http://localhost:10000`. (Ensure your local server is running via `node --watch app.js`).
+- **To Test Live Deployment:** Select **Blog API - Production**. This routes `{{baseUrl}}` directly to our live hosted web service on Render (`https://blog-api-lld2.onrender.com`), allowing you to evaluate the live endpoints instantly without spinning up a local server or database.
 
 ### 3. Automated Route Authentication Tracking
 
@@ -171,4 +173,7 @@ You can reach me on [X](https://x.com/NzubeIfechukwu) or [LinkedIn](https://www.
 ```
 
 ```
-````
+
+```
+
+```
