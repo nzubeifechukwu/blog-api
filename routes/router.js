@@ -3,7 +3,12 @@ const passport = require("passport");
 
 const controllers = require("../controllers/controllers");
 const { requireAuthor, optionalAuth } = require("../middleware/auth");
-const { idParamValidator, signUpValidator, postValidator, commentValidator } = require("../middleware/validators");
+const {
+  idParamValidator,
+  signUpValidator,
+  postValidator,
+  commentValidator,
+} = require("../middleware/validators");
 
 const router = Router();
 

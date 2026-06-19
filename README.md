@@ -11,7 +11,7 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 - **Dual-Role Authorization:** Dedicated workflows for `AUTHOR` and `READER` accounts.
 - **Secure Authentication:** Stateless session management via JSON Web Tokens (JWT) and Passport.js.
 - **Comprehensive Post CRUD:** Authors can create, read, update and delete articles.
-- **Engagement/Feedback System:** Users can write and manage comments.
+- **Engagement/Feedback System:** Users can write comments.
 - **Content Moderation:** Deletion capabilities extended to both the comment creator and the parent post author.
 
 ---
@@ -23,6 +23,7 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 - **Database Driver & ORM:** Prisma ORM
 - **Database:** PostgreSQL
 - **Authentication:** Passport.js (JWT Strategy) & bcryptjs (Password Hashing)
+- **Input Validation:** express-validator
 
 ---
 
@@ -40,7 +41,7 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 
 | Method   | Endpoint     | Access      | Description                                                          |
 | -------- | ------------ | ----------- | -------------------------------------------------------------------- |
-| `GET`    | `/posts`     | Public      | Retrieves a listing of all **published** articles.                   |
+| `GET`    | `/posts`     | Public      | Retrieves a listing of all published articles.                       |
 | `GET`    | `/posts/:id` | Public      | Retrieves a specific article by its unique ID.                       |
 | `POST`   | `/posts`     | Author Only | Creates a new article (defaults to draft format).                    |
 | `PATCH`  | `/posts/:id` | Post Owner  | Updates parts of an article (title, content, or publication status). |
