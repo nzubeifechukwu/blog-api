@@ -7,7 +7,7 @@ function home(req, res) {
   return res.status(200).json({
     message: "Welcome to Nzube's Blog API",
     version: "1.0.0",
-    docs: "tbd",
+    docs: "https://github.com/nzubeifechukwu/blog-api",
     endpoints: { user: "/users", posts: "/posts", comments: "/comments" },
   });
 }

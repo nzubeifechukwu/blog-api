@@ -4,6 +4,8 @@ A REST API designed to power a dual-frontend blogging platform: one frontend is 
 
 Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authentication to ensure security.
 
+https://blog-api-lld2.onrender.com/
+
 ---
 
 ## Features
