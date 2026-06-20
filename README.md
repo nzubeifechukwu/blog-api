@@ -13,7 +13,7 @@ Built with Node.js, Express, PostgreSQL, and Prisma ORM, this API uses JWT authe
 - **Dual-Role Authorization:** Dedicated workflows for `AUTHOR` and `READER` accounts.
 - **Secure Authentication:** Stateless session management via JSON Web Tokens (JWT) and Passport.js.
 - **Comprehensive Post CRUD:** Authors can create, read, update and delete articles.
-- **Engagement/Feedback System:** Users can write comments.
+- **Engagement System:** Users can write comments.
 - **Content Moderation:** Deletion capabilities extended to both the comment creator and the parent post author.
 
 ---
@@ -96,7 +96,7 @@ JWT_SECRET="your_super_secret_jwt_key_here"
 
 ### 5. Run Database Migrations
 
-Synchronize your local PostgreSQL database with the Prisma Schema blueprints and establish relationship constraints:
+Synchronize your local PostgreSQL database with the Prisma Schema blueprints:
 
 ```bash
 npx prisma migrate dev --name init_blog_schema
@@ -152,7 +152,7 @@ curl -X PATCH http://localhost:10000/posts/1 \
   -H "Content-Type: application/json" \
   -d '{"title": "Updated Article Title", "published": true}'
 
-# Delete an unmoderated comment object reference
+# Delete a comment
 curl -X DELETE http://localhost:10000/comments/5 \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 
