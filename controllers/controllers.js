@@ -278,7 +278,6 @@ async function deletePost(req, res, next) {
 
     await prisma.post.delete({
       where: { id: parseInt(id) },
-      include: { comments: true },
     });
 
     return res.status(200).json({ message: "Post deleted successfully." });
